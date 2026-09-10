@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.expo/
+*.tsbuildinfo
+
+# Projeto Vite antigo mantido na pasta meu-app
+meu-app/node_modules/
+meu-app/dist/
+
+# Arquivos locais e logs
+*.log
+*.local
+.DS_Store
+.vscode/
