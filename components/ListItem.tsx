@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-export interface ShoppingItemData {
+export interface ListItemData {
   id: number;
   name: string;
   quantity: number;
@@ -14,17 +14,17 @@ export interface ShoppingItemData {
   completed?: boolean;
 }
 
-interface Props {
-  item: ShoppingItemData;
-  onDelete?: () => void;
-  onToggle?: () => void;
+export interface ListItemProps {
+  item: ListItemData;
+  onDelete: () => void;
+  onToggle: () => void;
 }
 
-export default function ShoppingItem({
+export default function ListItem({
   item,
   onDelete,
   onToggle,
-}: Props) {
+}: ListItemProps) {
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -34,9 +34,7 @@ export default function ShoppingItem({
         ]}
         onPress={onToggle}
       >
-        {item.completed && (
-          <Text style={styles.check}>✓</Text>
-        )}
+        {item.completed && <Text style={styles.check}>✓</Text>}
       </TouchableOpacity>
 
       <Text
@@ -54,14 +52,9 @@ export default function ShoppingItem({
         </Text>
       </View>
 
-      {onDelete && (
-        <TouchableOpacity
-          style={styles.delete}
-          onPress={onDelete}
-        >
-          <Text style={styles.deleteText}>×</Text>
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity style={styles.delete} onPress={onDelete}>
+        <Text style={styles.deleteText}>×</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -76,7 +69,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-
   checkbox: {
     width: 19,
     height: 19,
@@ -87,29 +79,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 12,
   },
-
   checkboxCompleted: {
     backgroundColor: '#a4ed2c',
     borderColor: '#a4ed2c',
   },
-
   check: {
     color: '#10120c',
     fontSize: 12,
     fontWeight: 'bold',
   },
-
   name: {
     flex: 1,
     color: '#f0f0f0',
     fontSize: 14,
   },
-
   completedText: {
     textDecorationLine: 'line-through',
     color: '#767b84',
   },
-
   quantity: {
     backgroundColor: '#24262d',
     borderRadius: 5,
@@ -117,12 +104,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     marginRight: 8,
   },
-
   quantityText: {
     color: '#c5c7cc',
     fontSize: 10,
   },
-
   delete: {
     width: 28,
     height: 28,
@@ -131,7 +116,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   deleteText: {
     color: '#ff4d5d',
     fontSize: 18,

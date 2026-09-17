@@ -9,12 +9,12 @@ import {
   ScrollView,
 } from 'react-native';
 
-import ShoppingItem, {
-  ShoppingItemData,
-} from '../../components/ShoppingItem';
+import Header from '../../components/Header';
+import ItemCounter from '../../components/ItemCounter';
+import ListItem, { ListItemData } from '../../components/ListItem';
 
 interface Props {
-  initialItems: ShoppingItemData[];
+  initialItems: ListItemData[];
   onCreate: () => void;
   onEmpty: () => void;
 }
@@ -24,7 +24,7 @@ export default function ListScreen({
   onCreate,
   onEmpty,
 }: Props) {
-  const [items, setItems] = useState<ShoppingItemData[]>(initialItems);
+  const [items, setItems] = useState<ListItemData[]>(initialItems);
 
   const [newItem, setNewItem] = useState('');
   const [newQuantity, setNewQuantity] = useState(1);
@@ -82,45 +82,15 @@ export default function ListScreen({
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.label}>MINHA LISTA</Text>
-
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.title}>
-              Compras da semana
-            </Text>
-
-            <Text style={styles.subtitle}>
-              {pending.length} pendentes
-            </Text>
-          </View>
-
-          <TouchableOpacity style={styles.share}>
-            <Text style={styles.shareText}>↑</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.progressContainer}>
-          <View
-            style={[
-              styles.progress,
-              {
-                width: `${Math.max(
-                  15,
-                  (completed.length / items.length) * 100
-                )}%`,
-              },
-            ]}
-          />
-        </View>
-
-        <Text style={styles.cartCounter}>
-          {completed.length} de {items.length} no carrinho
-        </Text>
+        <Header
+          pendingCount={pending.length}
+          completedCount={completed.length}
+          totalCount={items.length}
+        />
 
         <View style={styles.list}>
           {pending.map(item => (
-            <ShoppingItem
+            <ListItem
               key={item.id}
               item={item}
               onToggle={() => toggleItem(item.id)}
@@ -136,7 +106,7 @@ export default function ListScreen({
             </Text>
 
             {completed.map(item => (
-              <ShoppingItem
+              <ListItem
                 key={item.id}
                 item={item}
                 onToggle={() => toggleItem(item.id)}
@@ -163,45 +133,16 @@ export default function ListScreen({
           </TouchableOpacity>
         </View>
 
-        <View style={styles.quantityRow}>
-          <TouchableOpacity
-            style={styles.quantityButton}
-            onPress={() =>
-              setNewQuantity(quantity => Math.max(1, quantity - 1))
-            }
-          >
-            <Text style={styles.quantityButtonText}>−</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.number}>{newQuantity}</Text>
-
-          <TouchableOpacity
-            style={styles.quantityButton}
-            onPress={() => setNewQuantity(quantity => quantity + 1)}
-          >
-            <Text style={styles.quantityButtonText}>+</Text>
-          </TouchableOpacity>
-
-          {['un', 'kg', 'cx', 'pct'].map(unit => (
-            <TouchableOpacity
-              key={unit}
-              style={[
-                styles.unit,
-                newUnit === unit && styles.unitSelected,
-              ]}
-              onPress={() => setNewUnit(unit)}
-            >
-              <Text
-                style={[
-                  styles.unitText,
-                  newUnit === unit && styles.unitSelectedText,
-                ]}
-              >
-                {unit}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        <ItemCounter
+          quantity={newQuantity}
+          unit={newUnit}
+          units={['un', 'kg', 'cx', 'pct']}
+          onDecrease={() =>
+            setNewQuantity(quantity => Math.max(1, quantity - 1))
+          }
+          onIncrease={() => setNewQuantity(quantity => quantity + 1)}
+          onUnitChange={setNewUnit}
+        />
       </ScrollView>
     </SafeAreaView>
   );
